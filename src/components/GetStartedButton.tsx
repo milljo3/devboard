@@ -1,10 +1,20 @@
 "use client"
 
-const GetStartedButton = () => {
-    return (
-        <div>
+import {Button} from "@/components/ui/button";
+import Link from "next/link";
+import {useSession} from "@/lib/auth-client";
 
-        </div>
+const GetStartedButton = () => {
+    const {data: session, isPending} = useSession();
+
+    const href = session ? "/profile" : "/auth/login";
+
+    return (
+        <Button size="lg" disabled={isPending} variant={"secondary"}>
+            <Link href={href}>
+                Get Started
+            </Link>
+        </Button>
     );
 };
 
