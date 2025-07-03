@@ -1,5 +1,5 @@
 import Link from "next/link";
-import SignUpForm from "@/components/SignUpForm";
+import {LoginForm} from "@/components/LoginForm";
 
 function Page() {
     return (
@@ -7,14 +7,14 @@ function Page() {
             <div className="px-8 py-16 container mx-auto max-w-screen-lg space-y-8 flex items-center justify-center w-full">
                 <div className="space-y-8 w-full self-center">
                     <div className="space-y-8 text-center">
-                        <h1 className="text-3xl font-bold">Sign Up</h1>
+                        <h1 className="text-3xl font-bold">Login to DevBoard</h1>
                     </div>
                     <div className="flex flex-col items-center justify-center gap-4">
-                        <SignUpForm />
+                        <LoginForm />
                         <p className="text-muted text-sm text-center">
-                            Already have an account?{" "}
-                            <Link href="/auth/login" className="hover:text-muted-foreground">
-                                Login
+                            Don&apos;t have an account?{" "}
+                            <Link href="/auth/signup" className="hover:text-muted-foreground">
+                                Sign Up
                             </Link>
                         </p>
                         <hr className="max-w-sm" />
