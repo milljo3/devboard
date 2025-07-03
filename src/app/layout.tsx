@@ -28,14 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-primary text-primary-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-primary text-secondary`}
       >
         <div className="flex justify-between items-center absolute top-0 left-0 w-full p-4">
             <Link
                 href="/"
                 className="text-primary-foreground text-lg"
             >
-                Dev<span className="text-secondary">Board</span>
+                Dev<span className="text-accent">Board</span>
             </Link>
             <SignOutButton />
         </div>
