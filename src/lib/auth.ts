@@ -9,5 +9,14 @@ export const auth = betterAuth({
     }),
     emailAndPassword: {
         enabled: true,
+        minPasswordLength: 6,
+    },
+    session: {
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60,
+        }
     }
 });
+
+export type ErrorCode = keyof typeof auth.$ERROR_CODES | "UNKNOWN";
