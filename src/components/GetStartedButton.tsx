@@ -10,7 +10,7 @@ const GetStartedButton = () => {
     const href = session ? "/profile" : "/auth/login";
 
     return (
-        <Button size="lg" disabled={isPending} variant={"secondary"}>
+        <Button size="lg" disabled={isPending}>
             <Link href={href}>
                 Get Started
             </Link>
