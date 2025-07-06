@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import {applicationUpdateSchema} from "@/lib/validation/applicationSchema";
 
 export async function PATCH(req: NextRequest) {
     const session = await auth.api.getSession({ headers: req.headers });
@@ -16,12 +17,24 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
 
-    const body = await req.json();
+    let body: unknown;
+    try {
+        body = await req.json();
+    }
+    catch (err) {
+        return NextResponse.json({ error: err}, { status: 400 });
+    }
 
-    const { company, companyUrl, position, applicationUrl, status } = body;
+    const parseResults = applicationUpdateSchema.safeParse(body);
 
-    if (!company || !position || !status) {
-        return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    if (!parseResults.success) {
+        return NextResponse.json({ error: "Invalid fields"}, { status: 400 });
+    }
+
+    const updateData = parseResults.data;
+
+    if (Object.keys(updateData).length === 0) {
+        return NextResponse.json({ error: "No fields to update" }, { status: 400 });
     }
 
     try {
@@ -33,7 +46,7 @@ export async function PATCH(req: NextRequest) {
 
         const updatedApp = await prisma.application.update({
             where: { id },
-            data: { company, companyUrl, position, applicationUrl, status },
+            data: updateData,
         });
 
         return NextResponse.json(updatedApp);
