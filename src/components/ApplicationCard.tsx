@@ -17,7 +17,7 @@ import {ApplicationStatus} from "@prisma/client";
 interface ApplicationCardProps {
     application: Application;
     onDelete: (applicationId: string) => void;
-    onEdit: (application?: Application) => void;
+    onEdit: (updatedFields: Partial<Application>) => void;
 }
 
 export const ApplicationCard = ({ application, onDelete, onEdit }: ApplicationCardProps) => {
@@ -61,18 +61,22 @@ export const ApplicationCard = ({ application, onDelete, onEdit }: ApplicationCa
                     justify-center
                   "
             >
-                <Link
-                    href={application.companyUrl ?? ""}
-                    className="truncate whitespace-normal break-words"
-                >
-                    {application.company}
-                </Link>
-                <Link
-                    href={application.applicationUrl ?? ""}
-                    className="truncate whitespace-normal break-words"
-                >
-                    {application.position}
-                </Link>
+                <div>
+                    <Link
+                        href={application.companyUrl ?? ""}
+                        className="truncate whitespace-normal break-words"
+                    >
+                        {application.company}
+                    </Link>
+                </div>
+                <div>
+                    <Link
+                        href={application.applicationUrl ?? ""}
+                        className="truncate whitespace-normal break-words"
+                    >
+                        {application.position}
+                    </Link>
+                </div>
 
                 <p className="hidden md:block truncate">{appliedAtString}</p>
                 <p className="hidden md:block truncate">{updatedAtString}</p>
@@ -85,12 +89,16 @@ export const ApplicationCard = ({ application, onDelete, onEdit }: ApplicationCa
                 {!isOpen ? "View More" : "View Less"}
             </CollapsibleTrigger>
             <div className="absolute bottom-0 right-2 flex gap-1">
-                <ApplicationDialog mode={"edit"} onSave={onEdit} />
+                <ApplicationDialog mode={"edit"} onEdit={onEdit} />
                 <Button
                     size={"icon"}
                     variant="destructive"
                     className="w-5 h-5"
-                    onClick={handleDelete}
+                    onClick={() => {
+                        if (window.confirm('Are you sure you want to delete this application?')) {
+                            handleDelete();
+                        }
+                    }}
                 >
                     <TrashIcon />
                 </Button>
