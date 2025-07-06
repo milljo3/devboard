@@ -19,7 +19,7 @@ interface StatusSelectorProps {
 export function StatusSelector({defaultStatus, onSelect}: StatusSelectorProps) {
     return (
         <Select onValueChange={onSelect} defaultValue={defaultStatus}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[120px]">
                 <SelectValue placeholder={defaultStatus}/>
             </SelectTrigger>
             <SelectContent>
