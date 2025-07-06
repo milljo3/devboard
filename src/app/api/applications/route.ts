@@ -12,21 +12,26 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = session.user.id;
     const searchParams = req.nextUrl.searchParams;
     const page = parseInt(searchParams.get("page") || "1");
+    const sortField = searchParams.get("sortField") || "updatedAt";
+    const sortOrder = searchParams.get("sortOrder") === "asc" ? "asc" : "desc";
 
     const skip = (page - 1) * PAGE_SIZE;
 
+    const validSortFields = ["company", "position", "appliedAt", "updatedAt", "status"];
+
     const [applications, totalCount] = await Promise.all([
         prisma.application.findMany({
-            where: {userId},
-            orderBy: { updatedAt: "desc" },
+            where: { userId: session.user.id },
+            orderBy: {
+                [validSortFields.includes(sortField) ? sortField : "updatedAt"]: sortOrder,
+            },
             skip,
             take: PAGE_SIZE,
         }),
         prisma.application.count({
-            where: {userId}
+            where: {userId: session.user.id}
         }),
     ]);
 
