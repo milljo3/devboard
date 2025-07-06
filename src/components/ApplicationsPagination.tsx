@@ -9,7 +9,7 @@ import {
     PaginationNext,
     PaginationEllipsis,
 } from "@/components/ui/pagination";
-import { useRouter } from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 interface Props {
     currentPage: number;
@@ -18,9 +18,12 @@ interface Props {
 
 const ApplicationsPagination = ({ currentPage, totalPages }: Props) => {
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const goToPage = (page: number) => {
-        router.push(`?page=${page}`);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("page", page.toString());
+        router.push(`?${params.toString()}`);
     };
 
     const getPageNumbers = () => {
