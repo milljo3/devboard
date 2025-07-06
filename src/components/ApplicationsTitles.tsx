@@ -16,7 +16,7 @@ const ApplicationsTitles = () => {
             <span>Company</span>
             <span>Position</span>
             <span className="md:hidden">Status</span>
-            <span className="hidden md:block">Applied</span>
+            <span className="hidden md:block">Created</span>
             <span className="hidden md:block">Updated</span>
             <span className="hidden md:block">Status</span>
         </div>
