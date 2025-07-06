@@ -18,7 +18,7 @@ const SearchApplicationForm = ({onSearch, isPending}: SearchApplicationFormProps
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex bg-white rounded-md borde gap-2">
+        <form onSubmit={handleSubmit} className="md:flex bg-white rounded-md borde gap-2 hidden">
             <div>
                 <Label htmlFor="search"></Label>
                 <Input
