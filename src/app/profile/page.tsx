@@ -16,7 +16,7 @@ const Page = async () => {
 
     return (
         <div className="flex items-center justify-center h-max mt-16 overflow-y-auto pb-4">
-            <Applications username={session.user.name} />
+            <Applications/>
         </div>
     );
 };

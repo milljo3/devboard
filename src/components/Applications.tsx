@@ -10,13 +10,9 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {toast} from "sonner";
 import ApplicationsTitles from "@/components/ApplicationsTitles";
 
-interface ApplicationsProps {
-    username: string;
-}
-
 const PAGE_SIZE = 8;
 
-const Applications = ({username}: ApplicationsProps) => {
+const Applications = () => {
     const [applications, setApplications] = useState<Application[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isPending, setIsPending] = useState(false);
@@ -43,7 +39,7 @@ const Applications = ({username}: ApplicationsProps) => {
             setIsPending(false);
         }
     }
-    
+
     useEffect(() => {
         const load = async () => {
             const data = await fetchApplications();
@@ -121,7 +117,7 @@ const Applications = ({username}: ApplicationsProps) => {
     };
 
 
-    const handleSearch = (search: string) => {
+    const handleSearch = () => {
 
     }
 
