@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
     Dialog,
     DialogClose,
@@ -11,22 +11,23 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Application } from "@/types/applications";
-import { EditIcon } from "lucide-react";
-import { StatusSelector } from "@/components/StatusSelector";
-import { useState } from "react";
-import { toast } from "sonner";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Application} from "@/types/applications";
+import {EditIcon} from "lucide-react";
+import {StatusSelector} from "@/components/StatusSelector";
+import {useState} from "react";
+import {toast} from "sonner";
 import {ApplicationStatus} from "../../node_modules/prisma/prisma-client"
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {z} from "zod";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 
 interface ApplicationDialogProps {
     mode: "add" | "edit";
     application?: Application;
-    onSave: (application?: Application) => void;
+    onEdit?: (updatedFields: Partial<Application>) => void;
+    onAdd?: () => void;
 }
 
 const formSchema = z.object({
@@ -39,7 +40,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export function ApplicationDialog({ mode, application, onSave }: ApplicationDialogProps) {
+export function ApplicationDialog({ mode, application, onEdit, onAdd }: ApplicationDialogProps) {
     const [open, setOpen] = useState(false);
 
     const {
@@ -64,22 +65,48 @@ export function ApplicationDialog({ mode, application, onSave }: ApplicationDial
     };
 
     const onSubmit = async (data: FormData) => {
-        const response = await fetch("/api/applications", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {"Content-Type": "application/json"},
-        });
+        if (mode === "add") {
+            try {
+                const response = await fetch("/api/applications", {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: {"Content-Type": "application/json"},
+                });
 
-        if (!response.ok) {
-            toast.error("Error creating application");
-            return;
+                if (!response.ok) {
+                    throw new Error("Failed to add application");
+                }
+            }
+            catch (error) {
+                console.error("Error creating application", error);
+                toast.error("Error creating application");
+            }
+
+            if (onAdd) {
+                onAdd();
+            }
+        }
+        else {
+            if (onEdit) {
+                onEdit(getChangedData(data));
+            }
         }
 
         toast.success(mode === "add" ? "Application added!" : "Application updated!");
         reset();
         setOpen(false);
-        onSave();
     };
+
+    const getChangedData = (data: FormData): Partial<Application> => {
+        return {
+            id: application?.id,
+            company: application?.company === data.company ? undefined : data.company,
+            companyUrl: application?.companyUrl === data.companyUrl ? undefined : data.companyUrl,
+            position: application?.position === data.position ? undefined : data.position,
+            applicationUrl: application?.applicationUrl === data.applicationUrl ? undefined : data.applicationUrl,
+            status: application?.status === data.status ? undefined : data.status,
+        };
+    }
 
     const openButton = mode === "add" ? (
         <Button variant="outline">Add Application</Button>
