@@ -4,6 +4,7 @@ import "./globals.css";
 import {Toaster} from "sonner";
 import SignOutButton from "@/components/SignOutButton";
 import Link from "next/link";
+import QueryProvider from "@/app/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +40,9 @@ export default function RootLayout({
             </Link>
             <SignOutButton />
         </div>
-        {children}
+        <QueryProvider>
+            {children}
+        </QueryProvider>
         <Toaster position="top-center" theme="dark" richColors={true} />
       </body>
     </html>
