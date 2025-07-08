@@ -9,7 +9,7 @@ import {toast} from "sonner";
 import ApplicationsTitles from "@/components/ApplicationsTitles";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12;
 
 const Applications = () => {
     const searchParams = useSearchParams();
@@ -22,7 +22,7 @@ const Applications = () => {
 
     const queryKey = ["applications", {page, sortField, sortOrder}];
 
-    const {data, isLoading,} = useQuery({
+    const {data, isLoading} = useQuery({
         queryKey,
         queryFn: async () => {
             const res = await fetch(`/api/applications?page=${page}&sortField=${sortField}&sortOrder=${sortOrder}`);
@@ -97,15 +97,22 @@ const Applications = () => {
                 <>
 
                     <div className="grid grid-cols-1 gap-2 place-items-center md:w-2/3 w-full">
-                        <ApplicationsTitles />
-                        {data?.applications.map((application: Application) => (
-                            <ApplicationCard
-                                application={application}
-                                key={application.id}
-                                onDelete={handleDeleteApplication}
-                                onEdit={handleEditApplication}
-                            />
-                        ))}
+                        {data?.applications.length === 0 && page === 1 ? (
+                            <h2>No applications yet? Click the button above to add a new one!</h2>
+                        ) : (
+                            <>
+                                <ApplicationsTitles />
+                                {data?.applications.map((application: Application) => (
+                                    <ApplicationCard
+                                        application={application}
+                                        key={application.id}
+                                        onDelete={handleDeleteApplication}
+                                        onEdit={handleEditApplication}
+                                    />
+                                ))}
+                            </>
+                        )}
+
                     </div>
                     {totalPages > 1 && (
                         <ApplicationsPagination
