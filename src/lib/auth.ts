@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "../../node_modules/@prisma/client";
+import {sendEmailAction} from "@/actions/send-email.action";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -10,6 +11,25 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         minPasswordLength: 6,
+        autoSignIn: false,
+        requireEmailVerification: true,
+    },
+    emailVerification: {
+        sendOnSignUp: true,
+        autoSignInAfterVerification: true,
+        sendVerificationEmail: async ({user, url}) => {
+            const link = new URL(url);
+            link.searchParams.set("callbackURL", "/auth/verify");
+
+            await sendEmailAction({
+                to: user.email,
+                subject: "Verify Your Email Address",
+                meta: {
+                    description: "Please verify your email address to complete registration.",
+                    link: String(link),
+                }
+            })
+        }
     },
     session: {
         cookieCache: {
