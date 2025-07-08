@@ -11,9 +11,9 @@ function Page() {
                     </div>
                     <div className="flex flex-col items-center justify-center gap-4">
                         <SignUpForm />
-                        <p className="text-muted text-sm text-center">
+                        <p className="text-sm text-center">
                             Already have an account?{" "}
-                            <Link href="/auth/login" className="hover:text-muted-foreground">
+                            <Link href="/auth/login">
                                 Login
                             </Link>
                         </p>
