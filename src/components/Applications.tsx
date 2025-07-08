@@ -2,7 +2,6 @@
 
 import {Application} from "@/types/applications";
 import {ApplicationCard} from "@/components/ApplicationCard";
-import SearchApplicationForm from "@/components/SearchApplicationForm";
 import ApplicationsPagination from "@/components/ApplicationsPagination";
 import {ApplicationDialog} from "@/components/ApplicationDialog";
 import {useRouter, useSearchParams} from "next/navigation";
@@ -87,15 +86,10 @@ const Applications = () => {
     };
 
 
-    const handleSearch = () => {
-
-    }
-
     return (
         <div className="w-full flex flex-col items-center gap-4 mt-4">
             <div className="flex gap-4">
                 <ApplicationDialog onAdd={handleAddApplication} mode="add"/>
-                <SearchApplicationForm onSearch={handleSearch} isPending={isLoading} />
             </div>
             {isLoading ? (
                 <div>Loading...</div>
