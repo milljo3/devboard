@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import {auth} from "@/lib/auth";
 import {applicationCreateSchema} from "@/lib/validation/applicationSchema";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12;
 
 export async function GET(req: NextRequest) {
     const headersList = req.headers;
