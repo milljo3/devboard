@@ -31,10 +31,10 @@ interface ApplicationDialogProps {
 }
 
 const formSchema = z.object({
-    company: z.string().min(1, "Company name is required"),
-    companyUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
-    position: z.string().min(1, "Job title is required"),
-    applicationUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
+    company: z.string().min(1, "Company name is required").max(50, "Company name too long"),
+    companyUrl: z.string().url("Invalid URL").max(250, "Company Url too long").optional().or(z.literal("")),
+    position: z.string().min(1, "Job title is required").max(50, "Position too long"),
+    applicationUrl: z.string().url("Invalid URL").max(250, "Application Url too long").optional().or(z.literal("")),
     status: z.nativeEnum(ApplicationStatus),
 });
 
@@ -138,7 +138,7 @@ export function ApplicationDialog({ mode, application, onEdit, onAdd }: Applicat
                         </div>
 
                         <div className="grid gap-3">
-                            <Label htmlFor="company-url">Company Website</Label>
+                            <Label htmlFor="company-url">Company Website <span className="italic">(optional)</span></Label>
                             <Input id="company-url" {...register("companyUrl")} />
                             {errors.companyUrl && <p className="text-sm text-red-500">{errors.companyUrl.message}</p>}
                         </div>
@@ -150,7 +150,7 @@ export function ApplicationDialog({ mode, application, onEdit, onAdd }: Applicat
                         </div>
 
                         <div className="grid gap-3">
-                            <Label htmlFor="job-url">Application URL</Label>
+                            <Label htmlFor="job-url">Application URL <span className="italic">(optional)</span></Label>
                             <Input id="job-url" {...register("applicationUrl")} />
                             {errors.applicationUrl && <p className="text-sm text-red-500">{errors.applicationUrl.message}</p>}
                         </div>
