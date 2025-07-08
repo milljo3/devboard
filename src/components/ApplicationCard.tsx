@@ -1,12 +1,7 @@
 "use client"
 
 import {Application} from "@/types/applications";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { useState } from "react";
+
 import Link from "next/link";
 import {ApplicationDialog} from "@/components/ApplicationDialog";
 import {Button} from "@/components/ui/button";
@@ -21,8 +16,6 @@ interface ApplicationCardProps {
 }
 
 export const ApplicationCard = ({ application, onDelete, onEdit }: ApplicationCardProps) => {
-    const [isOpen, setIsOpen] = useState(false);
-
     const handleDelete = () => {
         onDelete(application.id);
     }
@@ -42,11 +35,24 @@ export const ApplicationCard = ({ application, onDelete, onEdit }: ApplicationCa
         : "";
 
     return (
-        <Collapsible
-            open={isOpen}
-            onOpenChange={setIsOpen}
+        <div
             className="w-full border rounded-md shadow-sm flex flex-col items-center justify-center relative"
         >
+            <div className="flex gap-1 justify-between w-full px-2">
+                <ApplicationDialog mode={"edit"} onEdit={onEdit} />
+                <Button
+                    size={"icon"}
+                    variant="destructive"
+                    className="w-5 h-5"
+                    onClick={() => {
+                        if (window.confirm('Are you sure you want to delete this application?')) {
+                            handleDelete();
+                        }
+                    }}
+                >
+                    <TrashIcon />
+                </Button>
+            </div>
             <div
                 className="
                     grid
@@ -62,48 +68,39 @@ export const ApplicationCard = ({ application, onDelete, onEdit }: ApplicationCa
                   "
             >
                 <div>
-                    <Link
-                        href={application.companyUrl ?? ""}
-                        className="truncate whitespace-normal break-words"
-                    >
-                        {application.company}
-                    </Link>
+                    {application.companyUrl ? (
+                        <Link
+                            href={application.companyUrl}
+                            className="truncate whitespace-normal break-words hover:underline"
+                        >
+                            {application.company}
+                        </Link>
+                    ) : (
+                        <div className="truncate whitespace-normal break-words">
+                            {application.company}
+                        </div>
+                    )}
                 </div>
                 <div>
-                    <Link
-                        href={application.applicationUrl ?? ""}
-                        className="truncate whitespace-normal break-words"
-                    >
-                        {application.position}
-                    </Link>
+                    {application.applicationUrl ? (
+                        <Link
+                            href={application.applicationUrl}
+                            className="truncate whitespace-normal break-words hover:underline"
+                        >
+                            {application.position}
+                        </Link>
+                    ) : (
+                        <div className="truncate whitespace-normal break-words">
+                            {application.position}
+                        </div>
+                    )}
                 </div>
 
                 <p className="hidden md:block truncate">{appliedAtString}</p>
                 <p className="hidden md:block truncate">{updatedAtString}</p>
                 <StatusSelector defaultStatus={application.status} onSelect={handleStatusChange} />
             </div>
-            <CollapsibleContent className="px-4 py-2 text-sm text-muted-foreground">
-                Extra details here.
-            </CollapsibleContent>
-            <CollapsibleTrigger className="text-xs px-4 py-1 text-muted-foreground underline self-center">
-                {!isOpen ? "View More" : "View Less"}
-            </CollapsibleTrigger>
-            <div className="absolute bottom-0 right-2 flex gap-1">
-                <ApplicationDialog mode={"edit"} onEdit={onEdit} />
-                <Button
-                    size={"icon"}
-                    variant="destructive"
-                    className="w-5 h-5"
-                    onClick={() => {
-                        if (window.confirm('Are you sure you want to delete this application?')) {
-                            handleDelete();
-                        }
-                    }}
-                >
-                    <TrashIcon />
-                </Button>
-            </div>
-        </Collapsible>
+        </div>
     );
 };
 
