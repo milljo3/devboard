@@ -37,7 +37,7 @@ const SignInOauthButton = ({provider, signUp}: SignInOauthButtonProps) => {
     const providerName = provider === "google" ? "Google" : "GitHub";
 
     return (
-        <Button onClick={handleClick} disabled={isPending}>
+        <Button onClick={handleClick} disabled={isPending} className="cursor-pointer">
             Sign {action} with {providerName}
         </Button>
     );
