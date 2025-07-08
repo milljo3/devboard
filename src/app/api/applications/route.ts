@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import {auth} from "@/lib/auth";
+import {applicationCreateSchema} from "@/lib/validation/applicationSchema";
 
 const PAGE_SIZE = 8;
 
@@ -49,9 +50,21 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
+    let body: unknown
+    try {
+        body = await req.json();
+    }
+    catch (error) {
+        return NextResponse.json({ error: error }, { status: 400 });
+    }
 
-    const { company, companyUrl, position, applicationUrl, status } = body;
+    const parseResult = applicationCreateSchema.safeParse(body);
+
+    if (!parseResult.success) {
+        return NextResponse.json({ error: parseResult.error.flatten() }, { status: 400 });
+    }
+
+    const { company, companyUrl, position, applicationUrl, status } = parseResult.data;
 
     if (!company || !position || !status) {
         return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
