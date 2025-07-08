@@ -44,8 +44,8 @@ const SignUpForm = () => {
                     toast.error(ctx.error.message);
                 },
                 onSuccess: () => {
-                    toast.success("Sign up complete.");
-                    router.push("/profile");
+                    toast.success("Sign up complete. Please verify your email.");
+                    router.push("/auth/signup/success");
                 },
             }
         );
