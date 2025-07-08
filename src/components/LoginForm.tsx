@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import SignInOauthButton from "@/components/SignInOauthButton";
 
 export const LoginForm = () => {
     const [isPending, setIsPending] = useState(false);
@@ -47,20 +48,30 @@ export const LoginForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-sm space-y-3 px-4 w-full">
-            <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input type="email" id="email" name="email" />
-            </div>
+        <div className="flex flex-col gap-4 w-full justify-center items-center">
+            <form onSubmit={handleSubmit} className="max-w-sm space-y-3 px-4 w-full">
+                <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input type="email" id="email" name="email" />
+                </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input type="password" id="password" name="password" />
-            </div>
+                <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input type="password" id="password" name="password" />
+                </div>
 
-            <Button type="submit" variant="secondary" className="w-full cursor-pointer" disabled={isPending}>
-                Login
-            </Button>
-        </form>
+                <Button type="submit" className="w-full cursor-pointer" disabled={isPending}>
+                    Login
+                </Button>
+            </form>
+
+            <hr className="max-w-sm w-full" />
+
+            <div className="max-w-sm space-y-3 px-4 w-full flex flex-col">
+                <SignInOauthButton provider={"google"} />
+                <SignInOauthButton provider={"github"} />
+            </div>
+        </div>
+
     );
 };

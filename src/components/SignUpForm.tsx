@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {useRouter} from "next/navigation";
 import {useState} from "react";
+import SignInOauthButton from "@/components/SignInOauthButton";
+
 
 const SignUpForm = () => {
     const [isPending, setIsPending] = useState(false);
@@ -42,29 +44,38 @@ const SignUpForm = () => {
                     toast.error(ctx.error.message);
                 },
                 onSuccess: () => {
-                    toast.success("Sign up complete. Please verify your email.");
-                    router.push("/auth/register/success");
+                    toast.success("Sign up complete.");
+                    router.push("/profile");
                 },
             }
         );
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-sm space-y-3 px-4 w-full">
-            <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input type="email" id="email" name="email" />
-            </div>
+        <div className="flex flex-col gap-4 w-full justify-center items-center">
+            <form onSubmit={handleSubmit} className="max-w-sm space-y-3 px-4 w-full">
+                <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input type="email" id="email" name="email" />
+                </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input type="password" id="password" name="password" />
-            </div>
+                <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input type="password" id="password" name="password" />
+                </div>
 
-            <Button type="submit" variant="secondary" className="w-full cursor-pointer" disabled={isPending}>
-                Sign Up
-            </Button>
-        </form>
+                <Button type="submit" className="w-full cursor-pointer" disabled={isPending}>
+                    Sign Up
+                </Button>
+            </form>
+
+            <hr className="max-w-sm w-full" />
+
+            <div className="max-w-sm space-y-3 px-4 w-full flex flex-col">
+                <SignInOauthButton provider={"google"} signUp />
+                <SignInOauthButton provider={"github"} signUp />
+            </div>
+        </div>
     );
 };
 
